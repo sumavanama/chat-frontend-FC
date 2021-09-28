@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react'
-import './Registration.css';
+import './RegisterUser.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-export default function Example() {
+export default function RegisterUser() {
 
     const details = useSelector((state)=>state.details);
     const dispatch = useDispatch();
@@ -130,11 +131,12 @@ export default function Example() {
                         <button className='login-button' onClick={onSubmit}>Register</button>
                     </div>
                     <div className='register'>
-                        <button >Login</button>
+                        <Link style={{ color: '#ffffff' }} to='/login'>Login</Link>
                     </div>
                 </div>
             </div>
         </div>
     )
 }
+
 

@@ -130,3 +130,9 @@ body.auth .form-wrapper form .form-control {
     border-radius: 2%;
     box-shadow: 0px 0px 30px rgb(159 38 234 / 20%);
 }
+.dark{
+    background-color: #202124;
+    font-family: Nunito,sans-serif;
+    height: 100%;
+    color: white;
+}

@@ -2,17 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import { createStore } from 'redux';
+import userReducer from './app/reducers';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
-import userReducer from './reducers';
+import App from './App';
 
-const store= createStore(userReducer);
+const store=createStore(userReducer)
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-    <Registration/>
-    </Provider>
+  <Provider store={store}>
+  <App/>
+  </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
