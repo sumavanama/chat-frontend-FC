@@ -49,7 +49,7 @@ export default function Login() {
                             type: "USER_LOGIN",
                             data:res.data.data
                         })
-                        history.push('/contacts');
+                        history.push('/chats');
                     }
                 })
                 .catch(err => console.log("error", err)
