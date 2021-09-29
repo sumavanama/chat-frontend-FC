@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.dark{
+  background-color: #202124;
+  font-family: Nunito,sans-serif;
+  height: 100%;
+  color: white;
+}
