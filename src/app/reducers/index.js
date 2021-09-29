@@ -16,6 +16,9 @@ const userReducer = (state = initialState, action) => {
         case "USER_LOGIN":
             return Object.assign({}, state, { userDetails: action.data });
 
+        case "CREATE_CLIENT":
+            return Object.assign({}, state, { client: action.payload });
+
         default: return state;
     }
 }
