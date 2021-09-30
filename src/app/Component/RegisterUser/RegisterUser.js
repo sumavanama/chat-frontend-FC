@@ -4,11 +4,13 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { useHistory } from 'react-router-dom';
 
 export default function RegisterUser() {
 
     const details = useSelector((state)=>state.details);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [Details, setDetails] = useState({ username: "", email: '', mobile: '', password: "" });
     const [error, seterror] = useState({ nameError: "", passwordError: "", emailError: "", mobileError: "", confirmpasswordError: "" });
@@ -90,15 +92,15 @@ export default function RegisterUser() {
                 if (res.status === 200) {
                     dispatch({
                         type: "SUBMIT_REGISTER",
-                        details
+                        payload:res.data.data
                     })
+                    history.push("/chats")
                 }
             })
             .catch(err => console.log("error", err))
     }
 
     return (
-        <div className='dark'>
             <div className='login-container'>
                 <div className='login-box'>
                     <div className='login-header'>Register</div>
@@ -135,7 +137,6 @@ export default function RegisterUser() {
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 
