@@ -47,7 +47,7 @@ export default function Login() {
 
                         dispatch({
                             type: "USER_LOGIN",
-                            data:res.data.data
+                            payload:res.data.data
                         })
                         history.push('/chats');
                     }

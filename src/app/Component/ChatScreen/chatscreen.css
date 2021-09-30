@@ -170,6 +170,16 @@ p{
     margin-left: -258px;
 }
 
+.profile-time{
+    display: flex;
+    width: 10%;
+    height: 100%;
+    font-size: 1rem;
+    justify-content: center;
+    color: #b0b0b3;
+    align-items: center;
+    flex-direction: column;
+}
 .chats-button{
     border-radius: 50%;
     cursor: pointer;

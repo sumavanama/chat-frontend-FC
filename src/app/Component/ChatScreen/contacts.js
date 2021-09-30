@@ -4,18 +4,22 @@ import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import './chatscreen.css';
-export default function Contacts(props) {
+
+ import Header from '../Common/Header';
+ export default function Contacts(props) {
     const [states, setStates] = useState({
-        Data: null,
+        Data:null,
         extendpic: false,
         extendpicid: 0,
         backgroundblur: false,
-        user: null
+        user: null,
+        
     })
 
-    const userData = useSelector(state => state);
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch()
     const history = useHistory();
+    const[hideMenu,sethideMenu]=useState(false);
 
     useEffect(() => {
         getContacts();
@@ -27,20 +31,21 @@ export default function Contacts(props) {
                 method: "POST",
                 url: `https://ptchatindia.herokuapp.com/contacts`,
                 headers: {
-                    authorization: userData.userDetails.token,
+                    authorization: user.userDetails.token,
                 },
             })
             .then((res) => {
                 let details = [];
-                res.data.map((user, index) => {
-                    if (user.username === userData.userDetails.username) {
+                res.data.map((users, index) => {
+                    if (users.username === user.userDetails.username) {
                         setStates({ ...states, user: user })
                         index = index;
                     }
                     else {
-                        details.push(user);
+                        details.push(users);
                     }
                 });
+                
                 setStates({ ...states, Data: details })
             });
     }
@@ -67,8 +72,13 @@ export default function Contacts(props) {
         })
         history.push("/ChatRoom");
     };
+    const hideMenuBar = () => {
+        sethideMenu(value=>!value);
+      }
     return (
         <div className='entire-area'>
+             <Header title="Contacts" usersData={states.Data && states.Data} callBack={hideMenuBar}/>
+             <div className={hideMenu ? "menu-active":"entire-area-subdiv"}>
             <div className="chats">
                 {states.extendpic ? <img className="extendedimage" onClick={closePopUp} src={states.Data[states.extendpicid]['profile']} alt="profile" width="120px" height="100px" /> : ""}
                 <div className={states.backgroundblur ? 'background-inactive' : null} >
@@ -92,6 +102,6 @@ export default function Contacts(props) {
                 </div>
             </div>
         </div>
-
+</div>
     );
 }
