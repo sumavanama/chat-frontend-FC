@@ -1,0 +1,38 @@
+.messagepopup-right{
+    height: 12rem;
+    width: 73%;
+    margin-right: 5rem; 
+     margin-top: 8px;
+    background: #50535a;
+    box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
+    border-radius: 10px;
+}
+
+.messagepopup-left{
+  height: 12rem;
+  width: 73%;
+  margin-left: 5rem;
+  margin-top: 8px;
+  background: #50535a;
+  box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
+  border-radius: 10px;
+}
+
+.messagepopup-items{
+    width: 90%;
+    height: 25%;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    border-width: 0px 0px 1px 0px;
+    cursor: pointer;
+}
+.popup{
+  cursor:pointer;
+  color:#828282;
+  margin-left: 0.1rem;
+  float: right;
+}
+.popup:hover{
+ color:white;
+}

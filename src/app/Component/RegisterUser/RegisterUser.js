@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom';
+import ProfileUploader from '../profileUploader';
 
 export default function RegisterUser() {
 
@@ -132,6 +133,7 @@ export default function RegisterUser() {
                     <div className='login-submit'>
                         <button className='login-button' onClick={onSubmit}>Register</button>
                     </div>
+                    <ProfileUploader/>
                     <div className='register'>
                         <Link style={{ color: '#ffffff' }} to='/login'>Login</Link>
                     </div>
