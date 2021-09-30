@@ -13,7 +13,7 @@ export default function Contacts(props) {
         user: null
     })
 
-    const userData = useSelector(state => state);
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch()
     const history = useHistory();
 
@@ -27,18 +27,18 @@ export default function Contacts(props) {
                 method: "POST",
                 url: `https://ptchatindia.herokuapp.com/contacts`,
                 headers: {
-                    authorization: userData.userDetails.token,
+                    authorization: user.userDetails.token,
                 },
             })
             .then((res) => {
                 let details = [];
-                res.data.map((user, index) => {
-                    if (user.username === userData.userDetails.username) {
+                res.data.map((users, index) => {
+                    if (users.username === user.userDetails.username) {
                         setStates({ ...states, user: user })
                         index = index;
                     }
                     else {
-                        details.push(user);
+                        details.push(users);
                     }
                 });
                 setStates({ ...states, Data: details })
