@@ -6,20 +6,20 @@ import Header from '../Common/Header';
 import { BsChatDots } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 import menu from '../../../assets/three-dots-vertical.svg';
+import { loaderService } from '../../../service/loaderService';
 
 export default function Chatscreen() {
 
     const [Data, setData] = useState([]);
     const[hideMenu,sethideMenu]=useState(false);
     const [isEmpty, setisEmpty] = useState(false);
-    const user = useSelector(state => state.user)
-
-    const dispatch = useDispatch()
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
     const history = useHistory();
-
+    loaderService.hide();
     useEffect(() => {
-        getContacts()
-    }, [])
+        getContacts();
+    },[])
 
     const getContacts = () => {
         console.log(user);
@@ -54,9 +54,11 @@ export default function Chatscreen() {
     }
    
     const open = (user) => {
-        history.push({
-            pathname: "/ChatRoom"
-        });
+        dispatch({
+            type: "CREATE_CLIENT",
+            payload: user
+        })
+        history.push("/ChatRoom");
     };
 
     const getTimeByTimestamp = (timestamp) => {

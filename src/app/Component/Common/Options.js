@@ -1,13 +1,17 @@
 import React from 'react';
 import './Header.css';
-import { withRouter } from "react-router";
-import { connect } from 'react-redux';
-//import { logOut } from '../../actions/actions';
+import { useHistory} from "react-router";
+import {useDispatch} from 'react-redux';
 
-function Options(props) {
+
+export default function Options(props) {
+   const dispatch=useDispatch();
+   const history =useHistory();
     const logOut = () => {
-        props.logOut();
-        props.history.push('/');
+        dispatch({
+            type:'LOGOUT'
+        })
+        history.push('/');
     }
         return (
             <div className='overlay' onClick={props.onClose}>
@@ -20,8 +24,3 @@ function Options(props) {
         )
 }
 
-// const mapDispatchToProps = (dispatch) => ({
-//     logOut: () => dispatch(logOut()),
-// })
-
-export default connect(null, null)(withRouter(Options));

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import './Header.css';
 import menu from '../../../assets/three-dots-vertical.svg';
 import Options from './Options';
@@ -7,16 +7,21 @@ import { BsList } from 'react-icons/bs';
 import { BsXCircleFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { SideBarData } from './SideBarData';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-function  Header(props)  {
+import { useSelector,useDispatch } from 'react-redux';
+
+export default function  Header(props)  {
     const[isShowOptions,setShowOptions]=useState(false);
     const[isShowProfile,setShowProfile]=useState(false);
     const[searchButton,setSearchButton]=useState(false);
     const[searchIcon,setSearchIcon]=useState(props.title === "Contacts"?true:false);
     const[sidebar,setSidebar]=useState(false);
     let searchContact = React.createRef();
-
+    const user = useSelector((state) => state.user.userDetails)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        
+        console.log(props.usersData);
+    }, [])
     const showProfile = () => {
         setShowProfile(value=>!value);
         setShowOptions(value=>!value);
@@ -28,6 +33,10 @@ function  Header(props)  {
     }
 
     const showSearchbar = () => {
+        dispatch({
+            type:"SEARCH_DATA",
+            payload:[]
+        })
         setSearchButton(searchButton?false:true);
         
      }
@@ -52,7 +61,11 @@ function  Header(props)  {
             result[0] = "notFound"
         }
         console.log("in header", result[0]);
-        props.searchData(result);
+       // props.searchData(result);
+       dispatch({
+           type:"SEARCH_DATA",
+           payload:result
+       })
 
     }
 
@@ -88,7 +101,7 @@ function  Header(props)  {
                 </div> 
                   <div className="common-header">
                 <div className="header-profile" >
-                    <img className="header-image" src={props.user.profile} alt="profile" />
+                    <img className="header-image" src={user.profile} alt="profile" />
                 </div>
                 <div className="header-name">{props.title}</div>
                 <div className='header-search'>{searchButton && <input className="searchInput" autoFocus type="search" placeholder="Search contact's here" onChange={showSearch} ref={searchContact} />}
@@ -104,8 +117,3 @@ function  Header(props)  {
         )
     }
 
-const mapStateToProps = (state) => ({
-        user: state.user.userDetails
-});
-    
-export default connect(mapStateToProps,null )(withRouter(Header));

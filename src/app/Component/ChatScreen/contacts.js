@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import './chatscreen.css';
+import Header from '../Common/Header';
 
- import Header from '../Common/Header';
- export default function Contacts(props) {
+export default function Contacts(props) {
     const [states, setStates] = useState({
         Data:null,
         extendpic: false,
@@ -17,12 +17,16 @@ import './chatscreen.css';
     })
 
     const user = useSelector(state => state.user);
+    const searchContactData=useSelector((state)=>state.user.searchContactData);
     const dispatch = useDispatch()
     const history = useHistory();
     const[hideMenu,sethideMenu]=useState(false);
 
     useEffect(() => {
         getContacts();
+        dispatch({
+            type:"SEARCH_DATA",payload:[]
+        })
     }, []);
 
     const getContacts = () => {
@@ -105,3 +109,5 @@ import './chatscreen.css';
 </div>
     );
 }
+
+

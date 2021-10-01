@@ -1,24 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-function Profile(props) {
-        return (
-            <div className="header-profile-main">
-                <div className="header-profile-item">
-                    <img className="header-profile-image" src={props.user.profile} alt="userimage" />
-                </div>
-                <div className="header-profile-item">Name : {props.user.username}</div>
-                <div className="header-profile-item">Email : {props.user.email}</div>
-                <div className="header-profile-item">Mobileno : (+91) {props.user.mobile}</div>
+export default function Profile() {
+    const user = useSelector((state) => state.user.userDetails);
+    return (
+        <div className="header-profile-main">
+            <div className="header-profile-item">
+                <img className="header-profile-image" src={user.profile} alt="userimage" />
             </div>
-        )
-    }
+            <div className="header-profile-item">Name : {user.username}</div>
+            <div className="header-profile-item">Email : {user.email}</div>
+            <div className="header-profile-item">Mobileno : (+91) {user.mobile}</div>
+        </div>
+    )
+}
 
 
-const mapStateToProps = (state) => (
-    {
-        user: state.user.userDetails,
-    }
-);
-
-export default connect(mapStateToProps, null)(Profile);

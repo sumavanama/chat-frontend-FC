@@ -1,17 +1,14 @@
 import React, { useState, useRef } from 'react'
 import './RegisterUser.css';
+import "../Login/CommonStyles.css";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom';
 
 export default function RegisterUser() {
-
-    const details = useSelector((state)=>state.details);
     const dispatch = useDispatch();
     const history = useHistory();
-
     const [Details, setDetails] = useState({ username: "", email: '', mobile: '', password: "" });
     const [error, seterror] = useState({ nameError: "", passwordError: "", emailError: "", mobileError: "", confirmpasswordError: "" });
     const Name = useRef();
@@ -24,7 +21,11 @@ export default function RegisterUser() {
         if (type === 'Name' || type === 'all') {
             if (!Name.current.value) {
                 seterror({ nameError: 'Please enter username.' });
-            } else {
+            }
+            else if (Name.current.value.length < 4) {
+                seterror({ nameError: 'Please check username length.' });
+            }
+            else {
                 seterror({ nameError: '' });
             }
         }
@@ -44,7 +45,14 @@ export default function RegisterUser() {
         if (type === 'Mobile' || type === 'all') {
             if (!Mobile.current.value) {
                 seterror({ mobileError: 'Please enter mobile number.' });
-            } else {
+            }
+            else if (Mobile.current.value.length !== 10) {
+                seterror({ mobileError: 'Please check mobile number length.' });
+            }
+            else if (Mobile.current.value.match(/^[6-9][0-9]*$/)) {
+                seterror({ mobileError: "mobile number should start with 6 or 7 or 8 or 9" });
+            }
+            else {
                 seterror({ mobileError: '' });
             }
         }
@@ -92,7 +100,7 @@ export default function RegisterUser() {
                 if (res.status === 200) {
                     dispatch({
                         type: "SUBMIT_REGISTER",
-                        payload:res.data.data
+                        payload: res.data.data
                     })
                     history.push("/chats")
                 }
@@ -101,42 +109,42 @@ export default function RegisterUser() {
     }
 
     return (
-            <div className='login-container'>
-                <div className='login-box'>
-                    <div className='login-header'>Register</div>
-                    <div className='login-input'>
-                        <label>Username</label>
-                        <input type="text" className="input-change" placeholder="Enter Username..." ref={Name} onBlur={() => LoginData('Name')} />
-                        {error && <div className='error-msg'>{error.nameError}</div>}
-                    </div>
-                    <div className='login-input'>
-                        <label>Email</label>
-                        <input type="text" className="input-change" placeholder="Enter Email..." ref={Email} onBlur={() => LoginData('Email')} />
-                        {error &&  <div className='error-msg'>{error.emailError}</div>}
-                    </div>
-                    <div className='login-input'>
-                        <label>Mobile</label>
-                        <input type="number" className="input-change" placeholder="Enter Mobile..." ref={Mobile} onBlur={() => LoginData('Mobile')} />
-                        {error &&  <div className='error-msg'>{error.mobileError}</div>}
-                    </div>
-                    <div className='login-input'>
-                        <label>Password</label>
-                        <input type="password" placeholder="Enter password..." className="input-change" ref={Password} onBlur={() => LoginData('Password')} />
-                        {error &&  <div className='error-msg'>{error.passwordError}</div>}
-                    </div>
-                    <div className='login-input'>
-                        <label>ConfirmPassword</label>
-                        <input type="password" placeholder="Enter password..." className="input-change" ref={confirmPassword} onBlur={() => LoginData('confirmPassword')} />
-                        {error &&  <div className='error-msg'>{error.confirmpasswordError}</div>}
-                    </div>
-                    <div className='login-submit'>
-                        <button className='login-button' onClick={onSubmit}>Register</button>
-                    </div>
-                    <div className='register'>
-                        <Link style={{ color: '#ffffff' }} to='/login'>Login</Link>
-                    </div>
+        <div className='login-container'>
+            <div className='login-box'>
+                <div className='login-header'>Register</div>
+                <div className='login-input'>
+                    <label>Username</label>
+                    <input type="text" className="input-change" placeholder="Enter Username..." ref={Name} onBlur={() => LoginData('Name')} />
+                    {error && <div className='error-msg'>{error.nameError}</div>}
+                </div>
+                <div className='login-input'>
+                    <label>Email</label>
+                    <input type="text" className="input-change" placeholder="Enter Email..." ref={Email} onBlur={() => LoginData('Email')} />
+                    {error && <div className='error-msg'>{error.emailError}</div>}
+                </div>
+                <div className='login-input'>
+                    <label>Mobile</label>
+                    <input className="input-change" placeholder="Enter Mobile..." ref={Mobile} onBlur={() => LoginData('Mobile')} />
+                    {error && <div className='error-msg'>{error.mobileError}</div>}
+                </div>
+                <div className='login-input'>
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter password..." className="input-change" ref={Password} onBlur={() => LoginData('Password')} />
+                    {error && <div className='error-msg'>{error.passwordError}</div>}
+                </div>
+                <div className='login-input'>
+                    <label>ConfirmPassword</label>
+                    <input type="password" placeholder="Enter password..." className="input-change" ref={confirmPassword} onBlur={() => LoginData('confirmPassword')} />
+                    {error && <div className='error-msg'>{error.confirmpasswordError}</div>}
+                </div>
+                <div className='login-submit'>
+                    <button className='login-button' onClick={onSubmit}>Register</button>
+                </div>
+                <div className='register'>
+                    <Link style={{ color: '#ffffff' }} to='/login'>Login</Link>
                 </div>
             </div>
+        </div>
     )
 }
 
