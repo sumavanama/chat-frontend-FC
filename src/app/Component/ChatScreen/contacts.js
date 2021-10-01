@@ -4,21 +4,29 @@ import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import './chatscreen.css';
+import Header from '../Common/Header';
+
 export default function Contacts(props) {
     const [states, setStates] = useState({
-        Data: null,
+        Data:null,
         extendpic: false,
         extendpicid: 0,
         backgroundblur: false,
-        user: null
+        user: null,
+        
     })
 
     const user = useSelector(state => state.user);
+    const searchContactData=useSelector((state)=>state.user.searchContactData);
     const dispatch = useDispatch()
     const history = useHistory();
+    const[hideMenu,sethideMenu]=useState(false);
 
     useEffect(() => {
         getContacts();
+        dispatch({
+            type:"SEARCH_DATA",payload:[]
+        })
     }, []);
 
     const getContacts = () => {
@@ -41,6 +49,7 @@ export default function Contacts(props) {
                         details.push(users);
                     }
                 });
+                
                 setStates({ ...states, Data: details })
             });
     }
@@ -67,8 +76,13 @@ export default function Contacts(props) {
         })
         history.push("/ChatRoom");
     };
+    const hideMenuBar = () => {
+        sethideMenu(value=>!value);
+      }
     return (
         <div className='entire-area'>
+             <Header title="Contacts" usersData={states.Data && states.Data} callBack={hideMenuBar}/>
+             <div className={hideMenu ? "menu-active":"entire-area-subdiv"}>
             <div className="chats">
                 {states.extendpic ? <img className="extendedimage" onClick={closePopUp} src={states.Data[states.extendpicid]['profile']} alt="profile" width="120px" height="100px" /> : ""}
                 <div className={states.backgroundblur ? 'background-inactive' : null} >
@@ -92,6 +106,8 @@ export default function Contacts(props) {
                 </div>
             </div>
         </div>
-
+</div>
     );
 }
+
+

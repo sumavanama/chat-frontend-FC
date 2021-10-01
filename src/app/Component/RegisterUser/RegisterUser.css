@@ -70,14 +70,14 @@ body.auth .form-wrapper form .form-control {
     margin-bottom: 17px;
 }
 
-.login-container{
+/* .login-container{
     background-color: #202124;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 41rem;
     width: 100%;
-}
+} */
 
 .register{
     height: 20px;

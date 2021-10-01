@@ -7,6 +7,7 @@ const initialState = {
         token: ''
     },
     client: null,
+    searchContactData:[],
     pin_data: []
 }
 
@@ -23,7 +24,10 @@ const userReducer = (state = initialState, action) => {
             
         case "PIN_CONVERSATION":
             return Object.assign({}, state, { pin_data: action.data });
-
+        case "LOGOUT":
+             return initialState;
+        case "SEARCH_DATA":
+             return Object.assign({},state,{searchContactData:action.data});
         default: return state;
     }
 }

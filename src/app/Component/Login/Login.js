@@ -3,10 +3,9 @@ import './Login.css'
 import axios from 'axios';
 import './CommonStyles.css';
 import { Link } from 'react-router-dom';
-import {useSelector,useDispatch } from "react-redux";
+import {useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 export default function Login() {
-    const data = useSelector((state) => state.data);
     const dispatch = useDispatch();
     const history = useHistory();
     const [error, seterror] = useState({ nameError: "", passworderror: "" })
