@@ -106,42 +106,42 @@ export default function RegisterUser() {
                     history.push("/chats")
                 }
             })
-            .catch(err => console.log("error", err))
     }
 
     return (
             <div className='login-container'>
                 <div className='login-box'>
-                    <div className='login-header'>Register</div>
+                    <p className='login-header'>Register</p>
                     <div className='login-input'>
-                        <label>Username</label>
+                        <label>Username*</label>
                         <input type="text" className="input-change" placeholder="Enter Username..." ref={Name} onBlur={() => LoginData('Name')} />
                         {error && <div className='error-msg'>{error.nameError}</div>}
                     </div>
                     <div className='login-input'>
-                        <label>Email</label>
+                        <label>Email*</label>
                         <input type="text" className="input-change" placeholder="Enter Email..." ref={Email} onBlur={() => LoginData('Email')} />
                         {error &&  <div className='error-msg'>{error.emailError}</div>}
                     </div>
                     <div className='login-input'>
-                        <label>Mobile</label>
+                        <label>Mobile*</label>
                         <input type="number" className="input-change" placeholder="Enter Mobile..." ref={Mobile} onBlur={() => LoginData('Mobile')} />
                         {error &&  <div className='error-msg'>{error.mobileError}</div>}
                     </div>
                     <div className='login-input'>
-                        <label>Password</label>
+                        <label>Password*</label>
                         <input type="password" placeholder="Enter password..." className="input-change" ref={Password} onBlur={() => LoginData('Password')} />
                         {error &&  <div className='error-msg'>{error.passwordError}</div>}
                     </div>
                     <div className='login-input'>
-                        <label>ConfirmPassword</label>
+                        <label>ConfirmPassword*</label>
                         <input type="password" placeholder="Enter password..." className="input-change" ref={confirmPassword} onBlur={() => LoginData('confirmPassword')} />
                         {error &&  <div className='error-msg'>{error.confirmpasswordError}</div>}
                     </div>
+                    <ProfileUploader/>
+                    <div>*Please fill mandatory fields</div>
                     <div className='login-submit'>
                         <button className='login-button' onClick={onSubmit}>Register</button>
                     </div>
-                    <ProfileUploader/>
                     <div className='register'>
                         <Link style={{ color: '#ffffff' }} to='/login'>Login</Link>
                     </div>

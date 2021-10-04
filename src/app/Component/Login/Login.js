@@ -41,7 +41,6 @@ export default function Login() {
                     "username": Name.current.value,
                     "password": Password.current.value
                 }).then(res => {
-                    console.log(res.data);
                     if (res.status === 200) {
 
                         dispatch({
@@ -51,25 +50,24 @@ export default function Login() {
                         history.push('/chats');
                     }
                 })
-                .catch(err => console.log("error", err)
-            )
         }
     }
 
     return (
         <div className='login-container'>
             <div className='login-box'>
-                <div className='login-header'>Login</div>
+                <p className='login-header'>Login</p>
                 <div className='login-input'>
-                    <label>Username</label>
+                    <label>Username*</label>
                     <input type="text" className="input-change" placeholder="Enter User Name" ref={Name} onBlur={() => LoginData('Name')} />
                     <div className='error-msg'>{error && <p>{error.nameError}</p>}</div>
                 </div>
                 <div className='login-input'>
-                    <label>Password</label>
+                    <label>Password*</label>
                     <input type="password" placeholder="Enter password" className="input-change" ref={Password} onBlur={() => LoginData('Password')} />
                     <div className='error-msg'>{error && <p>{error.passworderror}</p>}</div>
                 </div>
+                <div>*Please fill mandatory fields</div>
                 <div className='login-submit'>
                     <button className='login-button' onClick={onSubmit}>Login</button>
                 </div>

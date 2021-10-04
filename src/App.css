@@ -1,3 +1,12 @@
+html, body{
+  height: 100%;
+}
+#root{
+  height: 100%;
+}
+.root-ct{
+  height: 100%;
+}
 .App {
   text-align: center;
 }
@@ -46,6 +55,6 @@
 .dark{
   background-color: #202124;
   font-family: Nunito,sans-serif;
-  height: 41.8rem;
+  height: 100%;
   color: white;
 }

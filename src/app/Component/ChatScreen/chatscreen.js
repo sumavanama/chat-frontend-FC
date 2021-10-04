@@ -22,7 +22,6 @@ export default function Chatscreen() {
     },[])
 
     const getContacts = () => {
-        console.log(user);
         axios
             .request({
                 method: "POST",
@@ -50,7 +49,6 @@ export default function Chatscreen() {
                     }
                 }
             })
-            .catch((err) => { console.log(err); })
     }
    
     const open = (user) => {

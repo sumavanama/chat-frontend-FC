@@ -193,10 +193,6 @@ p{
     bottom: 5%;
 }
 
-.chats-button:hover{
-    box-shadow: 0 0 1rem #e4e0e6c0; 
-}
-
 textarea {
     font-family: inherit;
     font-size: 100%;

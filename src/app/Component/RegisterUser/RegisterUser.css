@@ -1,4 +1,4 @@
-.input-change{
+/* .input-change{
     width: 12rem;
     height: 1.4rem;
     border-radius: 1rem;
@@ -79,7 +79,7 @@ body.auth .form-wrapper form .form-control {
     width: 100%;
 } */
 
-.register{
+/* .register{
     height: 20px;
     display: flex;
     justify-content: center;
@@ -134,4 +134,38 @@ body.auth .form-wrapper form .form-control {
     background-color: #202124;
     font-family: Nunito,sans-serif;
     color: white;
+}  */
+
+.container{
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    background-image: 'https://cdn.wallpapersafari.com/81/63/VtEaQF.jpg';
+    background-color: #202124;
 }
+
+.container__body{
+    border-radius: 23px;
+    flex-direction: column;
+    display: flex;
+    background-color: #383a3f;
+    margin-top:  3px;
+    height: 50%;
+    width: 50%;
+    box-shadow: -1px 4px 2-px -6px rgb(0,0,0,0.75);
+}
+
+.content_container {
+    margin-left: 35%;
+    margin-right: 35%;
+    align-self: center;
+
+}
+
+.login-box{
+    background: #383a3f;
+    padding: 30px 60px 30px 60px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 30px rgb(159 38 234 / 20%);
+}
+
