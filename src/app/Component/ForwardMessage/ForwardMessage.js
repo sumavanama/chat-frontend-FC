@@ -12,7 +12,7 @@ function ForwardMessage(props) {
     const [dataConversation, setdataConversation] = useState([]);
     const [dataContacts, setdataContacts] = useState([]);
     const user = useSelector(state => state.user)
-    const client =useSelector(state=>state.user.client);
+    const client = useSelector(state => state.user.client);
 
     useEffect(() => {
         socket = getSocket();
@@ -21,7 +21,7 @@ function ForwardMessage(props) {
     }, [])
 
     const getNewContacts = async () => {
-       await axios
+        await axios
             .request({
                 method: "POST",
                 url: `https://ptchatindia.herokuapp.com/contacts`,
@@ -35,7 +35,7 @@ function ForwardMessage(props) {
                     if (users.username !== user.userDetails.username) {
                         details.push(users);
                     }
-                }   
+                }
                 );
                 dataConversation.map((userConversation) => {
                     details.map((user, index) => {
@@ -44,7 +44,7 @@ function ForwardMessage(props) {
                         }
                     })
                 })
-                setdataContacts(details);               
+                setdataContacts(details);
             }).catch((err) => {
             })
     }
@@ -101,7 +101,8 @@ function ForwardMessage(props) {
         else if (years === 1) return (years.concat(' year', ' ago'));
         else return (years.concat(' years', ' ago'));
     }
-  const forwordUserList = [];
+    
+    const forwordUserList = [];
     const open = (user) => {
         forwordUserList.push(user);
     };
@@ -152,8 +153,7 @@ function ForwardMessage(props) {
                                     </div>
                                     <div className="forward-profile-time">
                                         <div>
-                                            {getDurationByTimestamp(user.latest.timestamp) === 'Today' && <div>{getTimeByTimestamp(user.latest.timestamp)}</div>}
-                                            {getDurationByTimestamp(user.latest.timestamp) !== 'Today' && <div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
+                                            {getDurationByTimestamp(user.latest.timestamp) === 'Today' ? <div>{getTimeByTimestamp(user.latest.timestamp)}</div> : <div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
                                         </div>
                                     </div>
                                 </div>

@@ -126,8 +126,7 @@ export default function Chatscreen() {
                                 </div>
                                 <div className="profile-time">
                                     <div>
-                                        {getDurationByTimestamp(user.latest.timestamp) === 'Today' && <div>{getTimeByTimestamp(user.latest.timestamp)}</div>}
-                                        {getDurationByTimestamp(user.latest.timestamp) !== 'Today' && <div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
+                                        {getDurationByTimestamp(user.latest.timestamp) === 'Today'?<div>{getTimeByTimestamp(user.latest.timestamp)}</div>:<div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
                                     </div>
                                 </div>
                                 <div className="archive-submit">

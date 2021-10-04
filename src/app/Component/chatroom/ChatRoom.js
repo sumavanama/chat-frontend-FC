@@ -14,7 +14,7 @@ import { useState, useEffect, useRef } from 'react';
 
 let socket = null;
 export default function ChatRoom(props) {
-  const [states, setStates] = useState({
+  const [properties, setProperties] = useState({
     message: '',
     messages: [],
     isOponentTyping: false,
@@ -50,17 +50,17 @@ export default function ChatRoom(props) {
 
   const onTyping = (data) => {
     if (user.username !== data.username) {
-      setStates({ ...states, isOponentTyping: data.typing });
+      setProperties({ ...properties, isOponentTyping: data.typing });
     }
   }
 
   const onMessage = (data) => {
     socket.emit("read_status", { username: user.username, client2: client.username, messageIds: [data.id] })
-    let msgs = states.messages;
+    let msgs = properties.messages;
     Object.assign(data, { messagePopUp: false });
     msgs.push(data);
     let previousDate = null;
-    setStates({ ...states, messages: msgs });
+    setProperties({ ...properties, messages: msgs });
   }
 
   const onMessages = (data) => {
@@ -74,14 +74,14 @@ export default function ChatRoom(props) {
     data.messages.map((obj) => {
       Object.assign(obj, { messagePopUp: false });
     })
-    setStates({ ...states, messages: data.messages })
+    setProperties({ ...properties, messages: data.messages })
     socket.off("messages", true)
   }
 
   const send = (index) => {
     let tempmsg = message.current.value.trim();
-    if (states.isEmojiActive) {
-      setStates({ ...states, isEmojiActive: false });
+    if (properties.isEmojiActive) {
+      setProperties({ ...properties, isEmojiActive: false });
     }
     if (index === -1) {
       if (tempmsg && tempmsg.length !== 0) {
@@ -92,7 +92,7 @@ export default function ChatRoom(props) {
         });
         message.current.value = '';
       }
-      setStates({ ...states, reply: false });
+      setProperties({ ...properties, reply: false });
 
     }
     else if (index !== -1) {
@@ -100,16 +100,16 @@ export default function ChatRoom(props) {
         socket.emit("reply", {
           username: user.username,
           client: client.username,
-          messageId: states.messages[index].id,
+          messageId: properties.messages[index].id,
           message: tempmsg
         });
         message.current.value = ''
       }
-      setStates({ ...states, Index: -1, reply: false });
+      setProperties({ ...properties, Index: -1, reply: false });
     }
   }
   const settings = () => {
-    setStates({ ...states, menu: true })
+    setProperties({ ...properties, menu: true })
   }
 
   const getTimeByTimestamp = (timestamp) => {
@@ -141,7 +141,7 @@ export default function ChatRoom(props) {
   }
 
   const handleEmoji = () => {
-    setStates({ ...states, isEmojiActive: !states.isEmojiActive, tempReaction: false });
+    setProperties({ ...properties, isEmojiActive: !properties.isEmojiActive, tempReaction: false });
   }
 
   const imageUploading = (e) => {
@@ -154,15 +154,15 @@ export default function ChatRoom(props) {
 
   }
   const msgDisplay = () => {
-    setStates({ ...states, reply: false, Index: -1 })
+    setProperties({ ...properties, reply: false, Index: -1 })
   }
 
   const forwardPopup = (message) => {
-    setStates({ ...states, forwardPopup:!states.forwardPopup, forwardingMessage: message })
+    setProperties({ ...properties, forwardPopup:!properties.forwardPopup, forwardingMessage: message })
   }
   //For Displaying message popup
   const showMessagePopUp = (index) => {
-    let msgs = states.messages
+    let msgs = properties.messages
     for (let i = 0; i < msgs.length; i++) {
       if (i === index) {
         msgs[i].messagePopUp = !msgs[index].messagePopUp;
@@ -181,29 +181,29 @@ export default function ChatRoom(props) {
     //     }
     //   }
     // }
-    setStates({ ...states, messages: msgs })
+    setProperties({ ...properties, messages: msgs })
   }
   let firstMsg = ''
   const onclickReply = (index) => {
-    firstMsg = states.messages[index].message
-    setStates({ ...states, reply: true, Index: index })
+    firstMsg = properties.messages[index].message
+    setProperties({ ...properties, reply: true, Index: index })
   }
 
   const deleteMessage = (user, client, msgId) => {
     socket.emit("delete", { username: user, client: client, messageId: msgId });
   }
   const handleReaction = (obj) => {
-    if (states.isEmojiActive === false) {
-      setStates({ ...states, reactionData: obj, isEmojiActive: !states.isEmojiActive, tempReaction: !states.tempReaction });
+    if (properties.isEmojiActive === false) {
+      setProperties({ ...properties, reactionData: obj, isEmojiActive: !properties.isEmojiActive, tempReaction: !properties.tempReaction });
     }
-    else if (states.isEmojiActive === true) {
-      setStates({ ...states, isEmojiActive: !states.isEmojiActive })
+    else if (properties.isEmojiActive === true) {
+      setProperties({ ...properties, isEmojiActive: !properties.isEmojiActive })
     }
   }
   const userReaction = (reaction, obj) => {
     socket.emit("reaction", { username: user.username, client: client.username, messageId: obj.id, reaction: reaction })
     socket.once('messages', onMessages);
-    setStates({ ...states, reactionData: {}, isEmojiActive: !states.isEmojiActive, tempReaction: !states.tempReaction });
+    setProperties({ ...properties, reactionData: {}, isEmojiActive: !properties.isEmojiActive, tempReaction: !properties.tempReaction });
   }
   const removeReaction = (obj) => {
     socket.emit("reaction", { username: user.username, client: client.username, messageId: obj.id })
@@ -212,12 +212,12 @@ export default function ChatRoom(props) {
 
   return (
     <>
-      {states.forwardPopup ? <ForwardMessage message={states.forwardingMessage} handleclose={forwardPopup} /> :
+      {properties.forwardPopup ? <ForwardMessage message={properties.forwardingMessage} handleclose={forwardPopup} /> :
         <div className='chat-room' >
           <ClientHeader title={client.username} />
           {/* <div className='msg-container' onClick={()=>{closePopup()}}> */}
           <div className='msg-container'>
-            {states.messages && !!states.messages.length && states.messages.map((message, index) => {
+            {properties.messages && !!properties.messages.length && properties.messages.map((message, index) => {
               return (<div className='message-field' key={index}>
                 {getDateByTimestamp(message.timestamp)}
                 {message.username === user.username && message.message ?
@@ -225,7 +225,7 @@ export default function ChatRoom(props) {
                     <span className='msg-right'><span className="popup" alt="dots" onClick={() => { showMessagePopUp(index) }}>&#8942;</span>
                       {message.hasOwnProperty('replyId') ?
                         <div>
-                          {states.messages && states.messages.map((firstmsg, index) => {
+                          {properties.messages && properties.messages.map((firstmsg, index) => {
                             return (
                               <div key={index} >
                                 {message.replyId === firstmsg.id ?
@@ -239,7 +239,7 @@ export default function ChatRoom(props) {
                         </div>
                         : <span >{message.message}</span>}
                     </span>
-                    {states.messages && message.reaction ? <div className='msg-right-reaction'>{message.reaction}</div> : null}
+                    {properties.messages && message.reaction ? <div className='msg-right-reaction'>{message.reaction}</div> : null}
                     {message.messagePopUp && <MessagePopup type="right" forwardMessage={() => forwardPopup(message.message)} socket={socket} indexValue={index} replyMsg={onclickReply} deleting={() => deleteMessage(user.username, client.username, message.id)} />}
                     <span className='msg-time-right'>{getTimeByTimestamp(message.timestamp)}</span>
                     < span className='msg-time-right'>{message.readStatus ? <img src={readIcon} /> : <img src={deliveredIcon} />}</span>
@@ -247,7 +247,7 @@ export default function ChatRoom(props) {
                   message.message && (<div className="msg-field-container aln-left">
                     <span className='msg-left'><span className="popup" alt="dots" onClick={() => { showMessagePopUp(index) }}>&#8942;</span>{message.hasOwnProperty('replyId') ?
                       <div>
-                        {states.messages.map((firstmsg) => {
+                        {properties.messages.map((firstmsg) => {
                           return (
                             <div>
                               {message.replyId === firstmsg.id ? <div onClick={() => { handleReaction(message) }}><div className='left-reply-msg-style'>
@@ -265,14 +265,14 @@ export default function ChatRoom(props) {
 
                       : <span className='message-onclick' onClick={() => { handleReaction(message) }}>{message.message}</span>}
                     </span>
-                    {states.messages && message.reaction ? <div className='msg-reaction-left' onClick={() => { removeReaction(message) }}><span>{message.reaction}</span></div> : null}
+                    {properties.messages && message.reaction ? <div className='msg-reaction-left' onClick={() => { removeReaction(message) }}><span>{message.reaction}</span></div> : null}
                     {message.messagePopUp && <MessagePopup forwardMessage={() => forwardPopup(message.message)} type="left" indexValue={index} replyMsg={onclickReply} />}
                     <span className='msg-time-left'>{getTimeByTimestamp(message.timestamp)}</span>
                   </div>)
                 }
               </div>)
             })}
-            {states.isOponentTyping &&
+            {properties.isOponentTyping &&
               <div>
                 <div className="msg-left" style={{ width: '14px', paddingLeft: '13px', marginLeft: '5px' }}>
                   <div className="bounce">
@@ -287,14 +287,14 @@ export default function ChatRoom(props) {
           </div>
 
           <div className='footer'>
-            <div>{states.reply ? <div className='reply'><div className='msg-style'><span className='reply-footer-display'>{firstMsg}</span>
+            <div>{properties.reply ? <div className='reply'><div className='msg-style'><span className='reply-footer-display'>{firstMsg}</span>
               <span className='msg-display' onClick={msgDisplay}>X</span></div></div> : null}</div>
             <div className="emoji">
               <GrEmoji className='emoji-style' onClick={() => { handleEmoji() }} />
-              {states.isEmojiActive === true && states.tempReaction === true ? <div className="emoji-holder">
+              {properties.isEmojiActive === true && properties.tempReaction === true ? <div className="emoji-holder">
                 <Picker
                   onEmojiClick={(obj, data) => {
-                    userReaction(data.emoji, states.reactionData)
+                    userReaction(data.emoji, properties.reactionData)
                   }}
                   disableAutoFocus={true}
                   skinTone={SKIN_TONE_MEDIUM_DARK}
@@ -302,7 +302,7 @@ export default function ChatRoom(props) {
                   pickerStyle={{ 'boxShadow': 'none' }}
                   native
                 />
-              </div> : <div>{states.isEmojiActive ?
+              </div> : <div>{properties.isEmojiActive ?
                 <div className="emoji-holder">
                   <Picker
                     onEmojiClick={(obj, data) => {
@@ -327,7 +327,7 @@ export default function ChatRoom(props) {
               <textarea className='textfield' id="textip" ref={message} onFocus={() => { sendTypingStartStatus() }} onBlur={() => { sendTypingEndStatus() }} placeholder='Type a message' />
             </div>
             <div className='submit-button'>
-              <button className='send' onClick={() => { send(states.Index) }}>Send</button>
+              <button className='send' onClick={() => { send(properties.Index) }}>Send</button>
             </div>
           </div>
         </div>
