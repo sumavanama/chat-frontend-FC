@@ -17,7 +17,7 @@ export default function Options(props) {
             <div className='overlay' onClick={props.onClose}>
                 <div className="options">
                     <div className="option-item" onClick={props.showProfile}>Profile</div>
-                    <div className="option-item">Add to archive</div>
+                
                     <div className="option-item-logout" onClick={logOut}>Logout</div>
                 </div>
             </div>

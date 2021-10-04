@@ -54,26 +54,26 @@
 
 
 .options{
-    height: 200px;
-    width: 180px;
-    position: absolute;
-    right: 10%;
-    top: 10%;
-    background: #50535a;
-    box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
-    border-radius: 10px;
+  height: 145px;
+  width: 150px;
+  position: absolute;
+  right: 10%;
+  top: 10%;
+  background: #50535a;
+  box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
+  border-radius: 10px;
 }
 
 .option-item{
-    width: 90%;
-    height: 33.3%;
-    justify-content: flex-start;
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    border: 1px solid white;
-    border-width: 0px 0px 1px 0px;
-    cursor: pointer;
+  width: 85%;
+  height: 49.3%;
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  border: 1px solid white;
+  border-width: 0px 0px 1px 0px;
+  cursor: pointer;
 }
 
 .option-item-logout{
@@ -87,14 +87,14 @@
 }
 
 .header-profile-main{
-    width: 40%;
-    height: 30%;
-    position: absolute;
-    top:10%;
-    right: 10%;
-    background: #50535a;
-    box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
-    border-radius: 10px;
+  width: 16rem;
+  height: 15.5rem;
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  background: #50535a;
+  box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
+  border-radius: 10px;
 }
 
 .header-profile-image{
@@ -104,12 +104,12 @@
 }
 
 .header-profile-item{
-    width: 90%;
-    height: 25%;
-    justify-content: flex-start;
-    display: flex;
-    align-items: center;
-    padding-left: 25px;
+  width: 90%;
+  height: 4rem;
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  padding-left: 25px;
 }
 .searchButton{
     right: 4rem;

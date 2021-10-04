@@ -22,7 +22,6 @@ export default function Chatscreen() {
     },[])
 
     const getContacts = () => {
-        console.log(user);
         axios
             .request({
                 method: "POST",
@@ -50,7 +49,6 @@ export default function Chatscreen() {
                     }
                 }
             })
-            .catch((err) => { console.log(err); })
     }
    
     const open = (user) => {
@@ -128,8 +126,7 @@ export default function Chatscreen() {
                                 </div>
                                 <div className="profile-time">
                                     <div>
-                                        {getDurationByTimestamp(user.latest.timestamp) === 'Today' && <div>{getTimeByTimestamp(user.latest.timestamp)}</div>}
-                                        {getDurationByTimestamp(user.latest.timestamp) !== 'Today' && <div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
+                                        {getDurationByTimestamp(user.latest.timestamp) === 'Today'?<div>{getTimeByTimestamp(user.latest.timestamp)}</div>:<div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
                                     </div>
                                 </div>
                                 <div className="archive-submit">
