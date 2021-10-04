@@ -1,18 +1,15 @@
 import React, { useState, useRef } from 'react'
 import './RegisterUser.css';
+import "../Login/CommonStyles.css";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom';
 import ProfileUploader from '../profileUploader';
 
 export default function RegisterUser() {
-
-    const details = useSelector((state)=>state.details);
     const dispatch = useDispatch();
     const history = useHistory();
-
     const [Details, setDetails] = useState({ username: "", email: '', mobile: '', password: "" });
     const [error, seterror] = useState({ nameError: "", passwordError: "", emailError: "", mobileError: "", confirmpasswordError: "" });
     const Name = useRef();
@@ -25,7 +22,11 @@ export default function RegisterUser() {
         if (type === 'Name' || type === 'all') {
             if (!Name.current.value) {
                 seterror({ nameError: 'Please enter username.' });
-            } else {
+            }
+            else if (Name.current.value.length < 4) {
+                seterror({ nameError: 'Please check username length.' });
+            }
+            else {
                 seterror({ nameError: '' });
             }
         }
@@ -45,7 +46,14 @@ export default function RegisterUser() {
         if (type === 'Mobile' || type === 'all') {
             if (!Mobile.current.value) {
                 seterror({ mobileError: 'Please enter mobile number.' });
-            } else {
+            }
+            else if (Mobile.current.value.length !== 10) {
+                seterror({ mobileError: 'Please check mobile number length.' });
+            }
+            else if (Mobile.current.value.match(/^[6-9][0-9]*$/)) {
+                seterror({ mobileError: "mobile number should start with 6 or 7 or 8 or 9" });
+            }
+            else {
                 seterror({ mobileError: '' });
             }
         }
@@ -93,7 +101,7 @@ export default function RegisterUser() {
                 if (res.status === 200) {
                     dispatch({
                         type: "SUBMIT_REGISTER",
-                        payload:res.data.data
+                        payload: res.data.data
                     })
                     history.push("/chats")
                 }

@@ -1,14 +1,14 @@
-function LoaderService() {
+class LoaderService {
     loaderElement = null;
-  function createLoaderElement(e) {
-        loaderElement = e;
-        hide();
+    createLoaderElement(e) {
+        this.loaderElement = e;
+        this.hide();
     }
-   function show() {
-        loaderElement.style.display = "flex";
+    show() {
+        this.loaderElement.style.display = "flex";
     }
-   function hide() {
-        loaderElement.style.display = "none";
+    hide() {
+        this.loaderElement.style.display = "none";
     }
 }
 export const loaderService = new LoaderService();
