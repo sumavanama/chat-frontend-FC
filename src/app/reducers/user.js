@@ -27,7 +27,7 @@ const userReducer = (state = initialState, action) => {
         case "LOGOUT":
              return initialState;
         case "SEARCH_DATA":
-             return Object.assign({},state,{searchContactData:action.data});
+             return Object.assign({},state,{searchContactData:action.payload});
         default: return state;
     }
 }
