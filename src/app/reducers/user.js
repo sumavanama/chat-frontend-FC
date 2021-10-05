@@ -23,7 +23,7 @@ const userReducer = (state = initialState, action) => {
             return Object.assign({}, state, { client: action.payload });
             
         case "PIN_CONVERSATION":
-            return Object.assign({}, state, { pin_data: action.data });
+            return Object.assign({}, state, { pin_data: action.payload });
         case "LOGOUT":
              return initialState;
         case "SEARCH_DATA":

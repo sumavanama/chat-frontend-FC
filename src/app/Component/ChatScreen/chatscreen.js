@@ -7,8 +7,11 @@ import { BsChatDots } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 import menu from '../../../assets/three-dots-vertical.svg';
 import { loaderService } from '../../../service/loaderService';
+import ArchivePinOptions from './ArchivePinOptions';
+import { AiFillPushpin } from "react-icons/ai";
 
-export default function Chatscreen() {
+
+  const Chatscreen=(props)=> {
 
     const [Data, setData] = useState([]);
     const[hideMenu,sethideMenu]=useState(false);
@@ -17,6 +20,7 @@ export default function Chatscreen() {
     const dispatch = useDispatch();
     const history = useHistory();
     loaderService.hide();
+    const [temp,setTemp]=useState(-1);
     useEffect(() => {
         getContacts();
     },[])
@@ -101,8 +105,51 @@ export default function Chatscreen() {
         })
         return latestMessage;
     }
+   const archiveMessage = (id,index) => {
+        let data=Data;
+        data[index].optionsShow=false;
+        axios
+            .request({
+                method: "POST",
+                url: `https://ptchatindia.herokuapp.com/archive`,
+                headers: {
+                    authorization:  user.userDetails.token,
+                },
+                data: {
+                    username: user.userDetails.username,
+                    roomIds: [id],
+                },
+            }).then((res) => {
+            })
+            data.splice(index,1)
+            setData(PrevData=>[...PrevData,Data]);
+    };
+   
+    const showOptions = (index) => {
+        
+        let Temp = temp;
+        if (Data[index].optionsShow) {
+            Data[index].optionsShow = false;
+        }
+        else {
+            if (index !== Temp && Temp >= 0) {
+                if (Data[Temp])
+                    Data[Temp].optionsShow = false;
+            }
+            Data[index].optionsShow = true;
+            Temp = index;
+        }
+        Temp = index;
+        setData(PrevData=>[...PrevData,Data]);
+        setTemp(Temp);
+       
+
+
+    }
+ 
 
     return (
+        
         <div>
             <div className="entire-area">
             <Header title="Conversations" callBack={hideMenuBar}/>
@@ -130,7 +177,10 @@ export default function Chatscreen() {
                                     </div>
                                 </div>
                                 <div className="archive-submit">
-                                    <img className="archive-button" src={menu} alt='archive-button' ></img>
+                                    <img className="archive-button" src={menu} onClick={() => { showOptions(index) }} alt='archive-button' ></img>
+                                  
+                                    {user.optionsShow==true ? <ArchivePinOptions id={Data[index].id} index={index} type='archive-pin'  archiveMessage={archiveMessage}  />:null}
+                                    
                                 </div>
                             </div>
                         )
@@ -149,3 +199,4 @@ export default function Chatscreen() {
     )
 }
 
+export default React.memo(Chatscreen)
