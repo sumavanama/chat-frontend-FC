@@ -1,21 +1,21 @@
 import React,{useState,useEffect} from 'react'
 import "./../ChatScreen/chatscreen.css";
-//import Header from "../Common/Header";
+import Header from "../Common/Header";
 import axios from "axios";
 import { connect } from "react-redux";
 //import { createClient } from "../../actions/actions";
 import { loaderService } from "../../../service/loaderService";
 //import CatchError from "../CatchError/CatchError";
 //import Unarchive from './../../../assests/Unarchive.svg';
-//import menu from './../../../assests/three-dots-vertical.svg'
 //import ArchivePinOptions from "../ChatScreen/ArchivePinOptions";
+import menu from '../../../assets/three-dots-vertical.svg';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom';
+import ArchivePinOptions from '../ChatScreen/ArchivePinOptions';
 export default function ArchivedMessages(props) {
    const[ state,setState] =useState({
         data: null,
-        user: props.location.state && props.location.state.user,
         menu: false,
         settingDetails: false,
         isEmpty: false,
@@ -23,7 +23,7 @@ export default function ArchivedMessages(props) {
         hideMenu: false,
         temp:-1
     });
-    const details = useSelector((state)=>state.user.userDetailsdetails);
+    const user = useSelector(state => state.user)
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -40,10 +40,10 @@ const getContacts = () => {
                 method: "POST",
                 url: `https://ptchatindia.herokuapp.com/conversations`,
                 headers: {
-                    authorization: props.user.token,
+                    authorization: user.userDetails.token,
                 },
                 data: {
-                    username: props.user.username,
+                    username: user.userDetails.username,
                     is_archive: 1,
                 },
                 
@@ -54,26 +54,21 @@ const getContacts = () => {
                 if (res.status === 200) {
                     if (res.data.data && res.data.data.length) {
                         let details = [];
-                        res.data.data.map((user) => {
-                            if (user.username !== props.user.username) {
-                                details.push(user);
+                        res.data.data.map((user1) => {
+                            if (user1.username !== user.userDetails.username) {
+                                details.push(user1);
                             }
                         });
                         setState({ ...state,data:details });
-                        loaderService.hide();
+                      
                     }
                     else {
                         setState({...state, isEmpty: true });
-                        loaderService.hide();
+                        
                     }
                 }
             })
-            .catch((err) => {
-                if (err.response.status != 200) {
-                    loaderService.hide();
-                    setState({ ...state,catchError: !state.catchError })
-                }
-            })
+            
     };
     
 }
@@ -114,36 +109,38 @@ const unArchiveMessage = (id,index) => {
             method: "POST",
             url: `https://ptchatindia.herokuapp.com/remove_archive`,
             headers: {
-                authorization: props.user.token,
+                authorization: user.userDetails.token,
             },
             data: {
-                username: props.user.username,
+                username:user.userDetails.username,
                 roomIds: [id],
             },
         }).then((res) => {
         }).catch((error) => console.log(error))
+        data.splice(index,1)
 setState({...state,data:data})
 }
-const showOptions=(index)=>
-{
-    let data=state.data;
-    let temp=state.temp;
-    if(data[index].optionsShow)
-    {
-    data[index].optionsShow=false;
+const showOptions = (index) => {
+        
+    let Temp = state.temp;
+    if (state.data[index].optionsShow) {
+        state.data[index].optionsShow = false;
     }
-    else
-    {
-        if(index!==temp && temp>=0)
-        {
-            if(data[temp])
-            data[temp].optionsShow=false;
+    else {
+        if (index !== Temp && Temp >= 0) {
+            if (state.data[Temp])
+                state.data[Temp].optionsShow = false;
         }
-        data[index].optionsShow=true;
-        temp=index;
+       state.data[index].optionsShow = true;
+        Temp = index;
     }
-    temp=index;
-    setState({...state,data:data,temp:temp});
+    Temp = index;
+    //setState(Prevdata=>[...Prevdata,state.data]);
+    setState({...state,data:state.data})
+    setState({...state,temp:Temp});
+   
+
+
 }
 
 
@@ -153,7 +150,7 @@ const hideMenuBar = () => {
 
     return (
         <div className="entire-area">
-        
+        <Header title="Archived Messages" callBack={hideMenuBar}/>
         <div>
             <div className={state.hideMenu?"menu-active":"chats"}>
                 {state.isEmpty && <div>No conversations found</div>}
@@ -175,8 +172,8 @@ const hideMenuBar = () => {
                                 </div>
                                 <div className="profile-time">{getTimeByTimestamp(user.latest.timestamp)}</div>
                              <div className='archive-submit'>
-                                    <img className='archive-button'  onClick={()=>{showOptions(index)}} src=''></img></div>
-                                    
+                                    <img className='archive-button'  onClick={()=>{showOptions(index)}} src={menu}></img></div>
+                                    {user.optionsShow && <ArchivePinOptions type='unarchive' id={user.id} unArchiveMessage={unArchiveMessage} index={index} />}
                             </div>
 
                         );
