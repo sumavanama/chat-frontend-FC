@@ -26,7 +26,6 @@ import { AiFillPushpin } from "react-icons/ai";
     },[])
 
     const getContacts = () => {
-        console.log(user);
         axios
             .request({
                 method: "POST",
@@ -54,7 +53,6 @@ import { AiFillPushpin } from "react-icons/ai";
                     }
                 }
             })
-            .catch((err) => { console.log(err); })
     }
    
     const open = (user) => {
@@ -175,8 +173,7 @@ import { AiFillPushpin } from "react-icons/ai";
                                 </div>
                                 <div className="profile-time">
                                     <div>
-                                        {getDurationByTimestamp(user.latest.timestamp) === 'Today' && <div>{getTimeByTimestamp(user.latest.timestamp)}</div>}
-                                        {getDurationByTimestamp(user.latest.timestamp) !== 'Today' && <div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
+                                        {getDurationByTimestamp(user.latest.timestamp) === 'Today'?<div>{getTimeByTimestamp(user.latest.timestamp)}</div>:<div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
                                     </div>
                                 </div>
                                 <div className="archive-submit">

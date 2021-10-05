@@ -1,0 +1,129 @@
+.overlay1{
+    height:100%;
+    width: 100%;
+    z-index: 9;
+    background: transparent;
+    position: absolute;
+}.client-common-header{
+    padding-bottom: 0.5rem;
+    width:90%;
+    margin-left: 5%;
+    height:10%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+.back-arrow{
+    height: 2rem;
+    width: 2rem;
+    margin-top: 1.2rem;
+}
+.client-header-profile{
+    width: 10%;
+    height: 100%;
+    display:flex;
+    margin-top: 1%;
+    justify-content: center;
+    align-items: center;
+}
+.client-header-name{
+    width:80%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 1rem;
+    margin-top: 0.5%;
+    font-size: 2rem;
+    color: #e2e2e3;
+}
+.client-header-menu{
+    width: 10%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.client-header-image{
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+}
+.options1{
+    height: 4rem;
+    width: 10rem;
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    background: #50535a;
+    box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
+    border-radius: 10px;;
+}
+.option-item1{
+    width: 90%;
+    height: 86.3%;
+    justify-content: flex-start;
+    display: flex;
+    color: white;
+    align-items: center;
+    padding-left: 20px;
+    border-width: 0px 0px 1px 0px;
+    cursor: pointer;
+}
+.client-header-profile-main{
+    width: 45%;
+    height: 60%;
+    position: absolute;
+    margin: 30px 150px 10px 370px;
+    background: #383a3f;
+    box-shadow: 0px 0px 30px rgb(14 10 16 / 84%);
+    border-radius: 10px;
+}
+.client-header-profile-image{
+    width: 120%;
+    height: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+    border-radius: 45%;
+}
+.client-header-profile-view-image{
+    width: 50%;
+    height: 50%;
+    align-items: center;
+    margin-left: 25%;
+    margin-right: auto;
+    margin-top: 1%;
+}
+
+.client-header-profile-item{
+   
+    justify-content: flex-start;
+    width: 50%;
+    font-size: 20px;
+    height: 35px;
+    display: flex;
+    margin-left: 40%;
+    padding: 1px;
+}
+
+.client-header-profile-image-item{
+    width: 50%;
+    height: 150px;
+    justify-content: flex-start;
+    display: flex;
+    margin-left: 40%;
+    margin-right: auto;
+    border-radius: 30%;
+}
+
+.header-button{
+    margin-left: 90%;
+    margin-top: 5px;
+    border-radius: 3px;
+}
+
+.entire{
+    width: 100%;
+}
+

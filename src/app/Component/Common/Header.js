@@ -18,10 +18,7 @@ export default function  Header(props)  {
     let searchContact = React.createRef();
     const user = useSelector((state) => state.user.userDetails)
     const dispatch = useDispatch()
-    useEffect(() => {
-        
-        console.log(props.usersData);
-    }, [])
+  
     const showProfile = () => {
         setShowProfile(value=>!value);
         setShowOptions(value=>!value);
@@ -60,7 +57,6 @@ export default function  Header(props)  {
         if (searchValue.length !== 0 && result.length === 0) {
             result[0] = "notFound"
         }
-        console.log("in header", result[0]);
        // props.searchData(result);
        dispatch({
            type:"SEARCH_DATA",
@@ -111,7 +107,7 @@ export default function  Header(props)  {
                 </div>
                 {isShowOptions && <Options showProfile={showProfile}
                    onClose={()=>setShowOptions(false)} />}
-                {isShowProfile && <Profile />}
+                {isShowProfile && <Profile  onClose={()=>setShowProfile(false)} />}
             </div>
             </div>
         )

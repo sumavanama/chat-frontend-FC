@@ -4,8 +4,8 @@ export function socketConnect(cb){
     if(!socket){
         socket = io('https://ptchatindia.herokuapp.com/', { transports: ['websocket'] });
     }
-    cb(socket);
 }
 export function getSocket(){
+    socketConnect();
     return socket;
 }

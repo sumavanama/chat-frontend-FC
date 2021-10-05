@@ -6,8 +6,8 @@ import axios from 'axios';
 import './chatscreen.css';
 import Header from '../Common/Header';
 
-export default function Contacts(props) {
-    const [states, setStates] = useState({
+export default function Contacts() {
+    const [properties, setProperties] = useState({
         Data:null,
         extendpic: false,
         extendpicid: 0,
@@ -42,7 +42,7 @@ export default function Contacts(props) {
                 let details = [];
                 res.data.map((users, index) => {
                     if (users.username === user.userDetails.username) {
-                        setStates({ ...states, user: user })
+                        setProperties({ ...properties, user: user })
                         index = index;
                     }
                     else {
@@ -50,24 +50,24 @@ export default function Contacts(props) {
                     }
                 });
                 
-                setStates({ ...states, Data: details })
+                setProperties({ ...properties, Data: details })
             });
     }
     const showpic = (id) => {
-        if (states.extendpic === false) {
+        if (properties.extendpic === false) {
             document.getElementById('blur1').style.filter = 'blur(4px)'
-            setStates({ ...states, extendpic: true, extendpicid: id, backgroundblur: true })
+            setProperties({ ...properties, extendpic: true, extendpicid: id, backgroundblur: true })
         }
         else {
-            if (states.extendpicid === id) {
+            if (properties.extendpicid === id) {
                 document.getElementById('blur1').style.filter = ''
-                setStates({ ...states, extendpic: false, backgroundblur: false })
+                setProperties({ ...properties, extendpic: false, backgroundblur: false })
             }
         }
     }
     const closePopUp = () => {
         document.getElementById('blur1').style.filter = ''
-        setStates({ extendpic: false, backgroundblur: false })
+        setProperties({ extendpic: false, backgroundblur: false })
     }
     const open = (user) => {
         dispatch({
@@ -81,14 +81,14 @@ export default function Contacts(props) {
       }
     return (
         <div className='entire-area'>
-             <Header title="Contacts" usersData={states.Data && states.Data} callBack={hideMenuBar}/>
+             <Header title="Contacts" usersData={properties.Data && properties.Data} callBack={hideMenuBar}/>
              <div className={hideMenu ? "menu-active":"entire-area-subdiv"}>
             <div className="chats">
-                {states.extendpic ? <img className="extendedimage" onClick={closePopUp} src={states.Data[states.extendpicid]['profile']} alt="profile" width="120px" height="100px" /> : ""}
-                <div className={states.backgroundblur ? 'background-inactive' : null} >
+                {properties.extendpic ? <img className="extendedimage" onClick={closePopUp} src={properties.Data[properties.extendpicid]['profile']} alt="profile" width="120px" height="100px" /> : ""}
+                <div className={properties.backgroundblur ? 'background-inactive' : null} >
                     <div id="blur1">
                         <div>
-                            {states.Data && !!states.Data.length && states.Data.map((user, index) => {
+                            {properties.Data && !!properties.Data.length && properties.Data.map((user, index) => {
                                 return (
                                     <div key={index} className="contact">
                                         <div className="profile-img">
