@@ -230,7 +230,7 @@ export default function ChatRoom(props) {
                               <div key={index} >
                                 {message.replyId === firstmsg.id ?
                                   <div>
-                                    <div className='right-reply-msg-style'><div className='right-username-style'><b>{firstmsg.username}</b></div><span className='first-msg-style'>{firstmsg.message}</span> </div>
+                                    <div className='reply-msg-style'><div className='right-username-style'><b>{firstmsg.username}</b></div><span className='first-msg-style'>{firstmsg.message}</span> </div>
                                     <span >{message.message}</span>
                                   </div> : null}
                               </div>
