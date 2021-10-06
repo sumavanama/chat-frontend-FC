@@ -7,13 +7,23 @@ import { BsChatDots } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 import menu from '../../../assets/three-dots-vertical.svg';
 import { loaderService } from '../../../service/loaderService';
+import ArchivePinOptions from "./ArchivePinOptions";
+import { AiFillPushpin } from "react-icons/ai";
 
-export default function Chatscreen() {
+export default function Chatscreen(props) {
 
     const [Data, setData] = useState([]);
     const[hideMenu,sethideMenu]=useState(false);
     const [isEmpty, setisEmpty] = useState(false);
+    const [contactData,setContactData]=useState({
+        contactData:[],
+        temp:-1,
+        chooseOption:false,
+        
+    });
+
     const user = useSelector(state => state.user);
+    const pin_data=useSelector(state=>state.user.pin_data);
     const dispatch = useDispatch();
     const history = useHistory();
     loaderService.hide();
@@ -39,10 +49,32 @@ export default function Chatscreen() {
                     if (res.data.data && res.data.data.length) {
                         let details = [];
                         res.data.data.map((userData) => {
-                            details.push(userData)
-                        })
-                        setData(details);
+                            if (userData.client.username !== user.client.username) {
+                                Object.assign(userData, { popUp: false })
+                                let found = 0;
+                                let pin = pin_data;
+                                if (pin.length === 0) {
+                                  details.push(userData);
+                                }
+                                else {
+                                    for (let i = 0; i < pin.length; i++) {
+                                        if (userData.id === pin[i].id)
+                                            found = 1
+                                    }
+                                    if (found === 0) {
+                                        details.push(userData);
+                                        found = 0
+                                    }
+                                    else {
+                                        found = 0
+                                        details.unshift(userData);
+                                    }
 
+                                }
+                            }
+                        });
+                        setData( details );
+                        
                     }
                     else {
                         setisEmpty(true);
@@ -102,6 +134,86 @@ export default function Chatscreen() {
         return latestMessage;
     }
 
+    const pinContact = (obj) => {
+        let pin =pin_data;
+        let contacts =Data;
+        if (pin.length < 3) {
+            pin.push(obj)
+            let temp = [], index = 0;
+            for (let i = 0; i < contacts.length; i++) {
+                if (contacts[i].id === obj.id) {
+                    contacts[i].optionsShow = false;
+                    temp = contacts.splice(i, 1);
+                }
+            }
+            contacts.unshift(temp[0])
+            dispatch({
+                type:"PIN_CONVERSATION",
+                payload:pin
+            })
+            // pin_conversation(pin_data);
+            setContactData({  chooseOption: true, });
+            setData(contacts)
+        }
+        else {
+            setContactData({ chooseOption: true });
+            setData(contacts)
+        }
+    }
+
+    const unPinContact = (obj) => {
+        let pin = pin_data;
+        let contacts = Data;
+        for (let i = 0; i < contacts.length; i++) {
+            if (contacts[i].id === obj.id) {
+                contacts[i].optionsShow = false;
+                contacts.splice(i, 1);
+            }
+        }
+        for (let i = 0; i < pin.length; i++) {
+            if (pin[i].id === obj.id)
+                pin.splice(i, 1);
+        }
+        contacts.push(obj);
+        // props.pin_conversation(pin_data);
+        dispatch({
+            type:"PIN_CONVERSATION",
+            payload:pin
+        })
+        setContactData({  chooseOption: true, });
+        setData(contacts)
+    }
+
+    const isPin = (obj) => {
+        let pin = pin_data;
+        let found = -1
+        for (let i = 0; i < pin.length; i++) {
+            if (pin[i].id === obj.id)
+                found = 1;
+        }
+        if (found === -1) {return false;}
+        else return true;
+    }
+
+    const showOptions = (index) => {
+        let data =Data;
+        let temp = contactData.temp;
+        if (data[index].optionsShow) {
+            data[index].optionsShow = false;
+        }
+        else {
+            if (index !== temp && temp >= 0) {
+                if (data[temp])
+                    data[temp].optionsShow = false;
+            }
+            data[index].optionsShow = true;
+            temp = index;
+        }
+        temp = index;
+        setContactData({ temp: temp });
+        setData(data)
+    }
+
     return (
         <div>
             <div className="entire-area">
@@ -130,8 +242,10 @@ export default function Chatscreen() {
                                     </div>
                                 </div>
                                 <div className="archive-submit">
-                                    <img className="archive-button" src={menu} alt='archive-button' ></img>
-                                </div>
+                                        <img className="archive-button" src={menu} onClick={() => {showOptions(index) }} ></img>
+                                        <div>{isPin(user) ? <div><p style={{ color: "white" }}><AiFillPushpin size={25} /></p></div> : null}</div>
+                                        {Data[index].optionsShow && <ArchivePinOptions id={Data[index].id} pinCallBack={pinContact}  unPinCallBack={unPinContact} obj={user} index={index} type='archive-pin'/>}
+                                    </div>
                             </div>
                         )
                     })}
