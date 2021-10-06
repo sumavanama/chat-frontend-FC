@@ -6,10 +6,12 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom';
 import ProfileUploader from '../profileUploader';
+import CatchError from '../CatchError/CatchError';
 
 export default function RegisterUser() {
     const dispatch = useDispatch();
     const history = useHistory();
+    const [catchError,setCatchError]= useState(false);
     const [Details, setDetails] = useState({ username: "", email: '', mobile: '', password: "" });
     const [error, seterror] = useState({ nameError: "", passwordError: "", emailError: "", mobileError: "", confirmpasswordError: "" });
     const Name = useRef();
@@ -106,10 +108,16 @@ export default function RegisterUser() {
                     history.push("/chats")
                 }
             })
+            .catch(error => {
+                setCatchError(!catchError)
+            });
     }
-
+    const catchErrorChange = () => {
+        setCatchError(!catchError)
+    }
     return (
             <div className='login-container'>
+                {!catchError?
                 <div className='login-box'>
                     <p className='login-header'>Register</p>
                     <div className='login-input'>
@@ -145,7 +153,7 @@ export default function RegisterUser() {
                     <div className='register'>
                         <Link style={{ color: '#ffffff' }} to='/login'>Login</Link>
                     </div>
-                </div>
+                </div>:<CatchError callBack={catchErrorChange}/>}
             </div>
     )
 }
