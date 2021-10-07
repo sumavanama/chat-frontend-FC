@@ -5,9 +5,11 @@ import './CommonStyles.css';
 import { Link } from 'react-router-dom';
 import {useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import CatchError from '../CatchError/CatchError';
 export default function Login() {
     const dispatch = useDispatch();
     const history = useHistory();
+    const [catchError,setCatchError]= useState(false);
     const [error, seterror] = useState({ nameError: "", passworderror: "" })
     const Name = useRef();
     const Password = useRef();
@@ -42,7 +44,6 @@ export default function Login() {
                     "password": Password.current.value
                 }).then(res => {
                     if (res.status === 200) {
-
                         dispatch({
                             type: "USER_LOGIN",
                             payload:res.data.data
@@ -50,12 +51,18 @@ export default function Login() {
                         history.push('/chats');
                     }
                 })
+                .catch((err)=>{
+                    setCatchError(true)
+                });
         }
+    }
+    const catchErrorChange=()=>{
+        setCatchError(!catchError)
     }
 
     return (
         <div className='login-container'>
-            <div className='login-box'>
+            {!catchError && <div className='login-box'>
                 <p className='login-header'>Login</p>
                 <div className='login-input'>
                     <label>Username*</label>
@@ -74,10 +81,9 @@ export default function Login() {
                 <div className='register'>
                     <Link style={{ color: '#ffffff' }} to='/register'>Register</Link>
                 </div>
-            </div>
+            </div>}
+            {catchError && <CatchError callBack={catchErrorChange}/>}
         </div>
-
-
     )
 }
 

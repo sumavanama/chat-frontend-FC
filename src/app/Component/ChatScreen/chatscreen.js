@@ -9,27 +9,45 @@ import menu from '../../../assets/three-dots-vertical.svg';
 import { loaderService } from '../../../service/loaderService';
 import ArchivePinOptions from "./ArchivePinOptions";
 import { AiFillPushpin } from "react-icons/ai";
+import { socketConnect } from '../../../service/socket';
 
 export default function Chatscreen(props) {
 
     const [Data, setData] = useState([]);
-    const[hideMenu,sethideMenu]=useState(false);
+    const [hideMenu, sethideMenu] = useState(false);
     const [isEmpty, setisEmpty] = useState(false);
-    const [contactData,setContactData]=useState({
-        contactData:[],
-        temp:-1,
-        chooseOption:false,
-        
+    const [contactData, setContactData] = useState({
+        contactData: [],
+        temp: -1,
+        chooseOption: false,
+
     });
 
     const user = useSelector(state => state.user);
-    const pin_data=useSelector(state=>state.user.pin_data);
+    const pin_data = useSelector(state => state.user.pin_data);
     const dispatch = useDispatch();
     const history = useHistory();
     loaderService.hide();
     useEffect(() => {
         getContacts();
-    },[])
+        socketConnect((socket) => {
+            socket = socket;
+            socket.emit("notifications", { username: user.username });
+            socket.on("notification", onNotification);
+        });
+    }, [])
+
+    useEffect(() => {
+        return () => {
+            socketConnect((socket) => {
+                socket.off("notification", onNotification);
+            });
+        }
+    }, [])
+
+    const onNotification = () => {
+        getContacts();
+    }
 
     const getContacts = () => {
         axios
@@ -54,7 +72,7 @@ export default function Chatscreen(props) {
                                 let found = 0;
                                 let pin = pin_data;
                                 if (pin.length === 0) {
-                                  details.push(userData);
+                                    details.push(userData);
                                 }
                                 else {
                                     for (let i = 0; i < pin.length; i++) {
@@ -73,8 +91,8 @@ export default function Chatscreen(props) {
                                 }
                             }
                         });
-                        setData( details );
-                        
+                        setData(details);
+
                     }
                     else {
                         setisEmpty(true);
@@ -82,7 +100,26 @@ export default function Chatscreen(props) {
                 }
             })
     }
-   
+    const archiveMessage = (id, index) => {
+        let data = Data;
+        data[index].optionsShow = false;
+        axios
+            .request({
+                method: "POST",
+                url: `https://ptchatindia.herokuapp.com/archive`,
+                headers: {
+                    authorization: user.userDetails.token,
+                },
+                data: {
+                    username: user.userDetails.username,
+                    roomIds: [id],
+                },
+            }).then((res) => {
+            })
+        data.splice(index, 1)
+        setData(PrevData => [...PrevData, Data]);
+    };
+
     const open = (user) => {
         dispatch({
             type: "CREATE_CLIENT",
@@ -116,7 +153,7 @@ export default function Chatscreen(props) {
         else return (years.concat(' years', ' ago'));
     }
     const hideMenuBar = () => {
-       sethideMenu(value=>!value);
+        sethideMenu(value => !value);
     }
     const selectContact = () => {
         history.push({
@@ -135,8 +172,8 @@ export default function Chatscreen(props) {
     }
 
     const pinContact = (obj) => {
-        let pin =pin_data;
-        let contacts =Data;
+        let pin = pin_data;
+        let contacts = Data;
         if (pin.length < 3) {
             pin.push(obj)
             let temp = [], index = 0;
@@ -148,11 +185,10 @@ export default function Chatscreen(props) {
             }
             contacts.unshift(temp[0])
             dispatch({
-                type:"PIN_CONVERSATION",
-                payload:pin
+                type: "PIN_CONVERSATION",
+                payload: pin
             })
-            // pin_conversation(pin_data);
-            setContactData({  chooseOption: true, });
+            setContactData({ chooseOption: true, });
             setData(contacts)
         }
         else {
@@ -175,12 +211,11 @@ export default function Chatscreen(props) {
                 pin.splice(i, 1);
         }
         contacts.push(obj);
-        // props.pin_conversation(pin_data);
         dispatch({
-            type:"PIN_CONVERSATION",
-            payload:pin
+            type: "PIN_CONVERSATION",
+            payload: pin
         })
-        setContactData({  chooseOption: true, });
+        setContactData({ chooseOption: true, });
         setData(contacts)
     }
 
@@ -191,12 +226,12 @@ export default function Chatscreen(props) {
             if (pin[i].id === obj.id)
                 found = 1;
         }
-        if (found === -1) {return false;}
+        if (found === -1) { return false; }
         else return true;
     }
 
     const showOptions = (index) => {
-        let data =Data;
+        let data = Data;
         let temp = contactData.temp;
         if (data[index].optionsShow) {
             data[index].optionsShow = false;
@@ -217,48 +252,46 @@ export default function Chatscreen(props) {
     return (
         <div>
             <div className="entire-area">
-            <Header title="Conversations" callBack={hideMenuBar}/>
-            <div className={hideMenu ? "menu-active":null}>
-                {isEmpty && <div> No Conversations Found</div>}
-                <div className="chats">
-                    {Data.map((user, index) => {
-                        return (
-                            user.messages && !!user.messages.length &&
-                            <div key={index} className="contact" >
-                                <div className="profile-img">
-                                    <img src={user.client.profile} className="image" alt='profile-img'></img>
-                                </div>
-                                <div className="text profile-nm" onClick={() => {
-                                    open(user.client);
-                                }}>
-                                    <div className="profile-name">
-                                        {user.client.username}
+                <Header title="Conversations" callBack={hideMenuBar} />
+                <div className={hideMenu ? "menu-active" : null}>
+                    {isEmpty && <div style={{textAlign:"center"}}> No Conversations Found</div>}
+                    <div className="chats">
+                        {Data.map((user, index) => {
+                            return (
+                                user.messages && !!user.messages.length &&
+                                <div key={index} className="contact" >
+                                    <div className="profile-img">
+                                        <img src={user.client.profile} className="image" alt='profile-img'></img>
                                     </div>
-                                    <p>{latestMessaage(user.messages)}</p>
-                                </div>
-                                <div className="profile-time">
-                                    <div>
-                                        {getDurationByTimestamp(user.latest.timestamp) === 'Today'?<div>{getTimeByTimestamp(user.latest.timestamp)}</div>:<div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
+                                    <div className="text profile-nm" onClick={() => {
+                                        open(user.client);
+                                    }}>
+                                        <div className="profile-name">
+                                            {user.client.username}
+                                        </div>
+                                        <p>{latestMessaage(user.messages)}</p>
                                     </div>
-                                </div>
-                                <div className="archive-submit">
-                                        <img className="archive-button" src={menu} onClick={() => {showOptions(index) }} ></img>
+                                    <div className="profile-time">
+                                        <div>
+                                            {getDurationByTimestamp(user.latest.timestamp) === 'Today' ? <div>{getTimeByTimestamp(user.latest.timestamp)}</div> : <div>{getDurationByTimestamp(user.latest.timestamp)}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="archive-submit">
+                                        <img className="archive-button" src={menu} onClick={() => { showOptions(index) }} ></img>
                                         <div>{isPin(user) ? <div><p style={{ color: "white" }}><AiFillPushpin size={25} /></p></div> : null}</div>
-                                        {Data[index].optionsShow && <ArchivePinOptions id={Data[index].id} pinCallBack={pinContact}  unPinCallBack={unPinContact} obj={user} index={index} type='archive-pin'/>}
+                                        {Data[index].optionsShow && <ArchivePinOptions id={Data[index].id} pinCallBack={pinContact} unPinCallBack={unPinContact} obj={user} index={index} archiveMessage={archiveMessage} type='archive-pin' />}
                                     </div>
-                            </div>
-                        )
-                    })}
-                </div>
-                <div className="contacts-footer">
-                    <div className="chats-position">
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className="contacts-footer">
                         <div className="chats-button" onClick={() => { selectContact() }}>
                             <BsChatDots />
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     )
 }

@@ -18,6 +18,7 @@ export default function Header(props) {
     const [isShowOptions, setShowOptions] = useState(false);
     const [isShowProfile, setShowProfile] = useState(false);
     const [searchButton, setSearchButton] = useState(false);
+    const [contactsData, setContactsData] =useState([])
     const [searchIcon, setSearchIcon] = useState(props.title === "Contacts" ? true : false);
     const [sidebar, setSidebar] = useState(false);
     let searchContact = React.createRef();
@@ -69,6 +70,7 @@ export default function Header(props) {
             payload: []
         })
         setSearchButton(searchButton ? false : true);
+        setContactsData(props.usersData)
 
     }
     const showSearch = () => {
@@ -77,13 +79,13 @@ export default function Header(props) {
         if (searchValue.length > 0) {
             if (isNaN(searchValue)) {
                 searchValue = searchValue.toLowerCase();
-                result = props.usersData.filter((data) => {
+                result = contactsData.filter((data) => {
                     return data.username.toLowerCase().includes(searchValue);
                 });
             }
             else {
                 searchValue = parseInt(searchValue);
-                result = props.usersData.filter((data) => {
+                result = contactsData.filter((data) => {
                     return data.mobile.includes(searchValue);
                 });
             }
@@ -91,7 +93,6 @@ export default function Header(props) {
         if (searchValue.length !== 0 && result.length === 0) {
             result[0] = "notFound"
         }
-        // props.searchData(result);
         dispatch({
             type: "SEARCH_DATA",
             payload: result
