@@ -1,12 +1,12 @@
 .input-change{
     width: 13rem;
     height: 1.5rem;
-    border-radius: 15px 15px 15px 15px;
-    margin-right: 1rem;
+    border-radius: 10px;
     background-color: #4b4e55;
-    color: white;
     font-size: 15px;
     padding-left: 5px;
+    color: white;
+    border: none;
 } 
 
 .login-button{
@@ -36,7 +36,6 @@ label{
     font-size: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 body.auth .form-wrapper form .form-control {

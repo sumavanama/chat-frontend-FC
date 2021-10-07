@@ -13,19 +13,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
 
 let socket = null;
+let firstMsg=''
 export default function ChatRoom(props) {
   const [properties, setProperties] = useState({
     message: '',
     messages: [],
     isOponentTyping: false,
-    isEmojiActive: false,
     forwardPopup: false,
     forwardingMessage: '',
     reply: false,
     Index: -1,
-    reactionData: {},
-    tempReaction: false
   })
+  const [reactionData, setReactionData] = useState({})
+  const [tempReaction, setTempReaction] = useState(false)
+  const [isEmojiActive, setIsEmojiActive] = useState(false)
   const message = useRef();
   const user = useSelector(state => state.user.userDetails);
   const client = useSelector(state => state.user.client);
@@ -80,8 +81,8 @@ export default function ChatRoom(props) {
 
   const send = (index) => {
     let tempmsg = message.current.value.trim();
-    if (properties.isEmojiActive) {
-      setProperties({ ...properties, isEmojiActive: false });
+    if (isEmojiActive) {
+      setIsEmojiActive(false);
     }
     if (index === -1) {
       if (tempmsg && tempmsg.length !== 0) {
@@ -141,7 +142,8 @@ export default function ChatRoom(props) {
   }
 
   const handleEmoji = () => {
-    setProperties({ ...properties, isEmojiActive: !properties.isEmojiActive, tempReaction: false });
+    setIsEmojiActive(!isEmojiActive)
+    setTempReaction(false)
   }
 
   const imageUploading = (e) => {
@@ -183,7 +185,6 @@ export default function ChatRoom(props) {
     // }
     setProperties({ ...properties, messages: msgs })
   }
-  let firstMsg = ''
   const onclickReply = (index) => {
     firstMsg = properties.messages[index].message
     setProperties({ ...properties, reply: true, Index: index })
@@ -193,17 +194,21 @@ export default function ChatRoom(props) {
     socket.emit("delete", { username: user, client: client, messageId: msgId });
   }
   const handleReaction = (obj) => {
-    if (properties.isEmojiActive === false) {
-      setProperties({ ...properties, reactionData: obj, isEmojiActive: !properties.isEmojiActive, tempReaction: !properties.tempReaction });
+    if (isEmojiActive === false) {
+      setReactionData(obj)
+      setTempReaction(!tempReaction)
+      setIsEmojiActive(!isEmojiActive)
     }
-    else if (properties.isEmojiActive === true) {
-      setProperties({ ...properties, isEmojiActive: !properties.isEmojiActive })
+    else if (isEmojiActive === true) {
+      setIsEmojiActive(!isEmojiActive)
     }
   }
   const userReaction = (reaction, obj) => {
     socket.emit("reaction", { username: user.username, client: client.username, messageId: obj.id, reaction: reaction })
     socket.once('messages', onMessages);
-    setProperties({ ...properties, reactionData: {}, isEmojiActive: !properties.isEmojiActive, tempReaction: !properties.tempReaction });
+    setReactionData({})
+    setIsEmojiActive(!isEmojiActive)
+    setTempReaction(!tempReaction)
   }
   const removeReaction = (obj) => {
     socket.emit("reaction", { username: user.username, client: client.username, messageId: obj.id })
@@ -230,7 +235,7 @@ export default function ChatRoom(props) {
                               <div key={index} >
                                 {message.replyId === firstmsg.id ?
                                   <div>
-                                    <div className='reply-msg-style'><div className='right-username-style'><b>{firstmsg.username}</b></div><span className='first-msg-style'>{firstmsg.message}</span> </div>
+                                    <div className='right-reply-msg-style'><div className='right-username-style'><b>{firstmsg.username}</b></div><span className='first-msg-style'>{firstmsg.message}</span> </div>
                                     <span >{message.message}</span>
                                   </div> : null}
                               </div>
@@ -291,10 +296,10 @@ export default function ChatRoom(props) {
               <span className='msg-display' onClick={msgDisplay}>X</span></div></div> : null}</div>
             <div className="emoji">
               <GrEmoji className='emoji-style' onClick={() => { handleEmoji() }} />
-              {properties.isEmojiActive === true && properties.tempReaction === true ? <div className="emoji-holder">
+              {isEmojiActive === true && tempReaction === true ? <div className="emoji-holder">
                 <Picker
                   onEmojiClick={(obj, data) => {
-                    userReaction(data.emoji, properties.reactionData)
+                    userReaction(data.emoji, reactionData)
                   }}
                   disableAutoFocus={true}
                   skinTone={SKIN_TONE_MEDIUM_DARK}
@@ -302,7 +307,7 @@ export default function ChatRoom(props) {
                   pickerStyle={{ 'boxShadow': 'none' }}
                   native
                 />
-              </div> : <div>{properties.isEmojiActive ?
+              </div> : <div>{isEmojiActive ?
                 <div className="emoji-holder">
                   <Picker
                     onEmojiClick={(obj, data) => {
